@@ -2,6 +2,7 @@ import { redirect } from "@remix-run/node";
 import { db } from "~/db";
 import { commitSession, getSession } from "~/sessions";
 import bcrypt from "bcryptjs";
+import { Role } from "@prisma/client";
 
 export async function verify(request: Request, role: string) {
 
@@ -20,21 +21,17 @@ export async function verify(request: Request, role: string) {
       throw new Error("No role in session");
     }
 
-    if (roleSession.toLowerCase() === 'admin') {
+    if (roleSession === Role.ADMIN) {
       return true //god mode
     }
 
-    if (roleSession.toLowerCase() !== role.toLowerCase()) {
+    if (roleSession !== role) {
       // logged in but do not have permission to access this page
       redirect('/login?error=unauthorized-privileges')
     }
-
     return true
-
   }
-
   redirect('/login?error=unauthorized-no-role')
-
 }
 
 export async function login(request: Request, email: string, password: string) {
