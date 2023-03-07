@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@picocss/pico": "^1.5.7",
+    "@prisma/client": "^4.11.0",
     "@remix-run/node": "^1.14.0",
     "@remix-run/react": "^1.14.0",
     "@remix-run/serve": "^1.14.0",
@@ -22,6 +23,7 @@
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "eslint": "^8.27.0",
+    "prisma": "^4.11.0",
     "typescript": "^4.8.4"
   },
   "engines": {
