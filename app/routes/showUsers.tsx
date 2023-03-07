@@ -1,8 +1,13 @@
+import { Role } from "@prisma/client";
 import type { LoaderArgs } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react";
 import { db } from "~/db";
+import verify from "~/login";
 
 export async function loader({request}: LoaderArgs) {
+
+  await verify(request, [Role.ADMIN]);
+
   const users = db.user.findMany(
     {
       select: {
