@@ -1,3 +1,5 @@
+import type { LoaderArgs } from "@remix-run/node"
+import { getSession } from "./sessions";
 import type { MetaFunction } from "@remix-run/node";
 import {
   Links,
@@ -6,9 +8,10 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
-
 import styles from './styles.css'
+import Header from "./components/Header";
 
 export function links() {
   return [{
@@ -23,7 +26,29 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
+export async function loader({request}: LoaderArgs) {
+  
+  const data = {
+    userId: '',
+    role: ''
+  }
+  const session = await getSession(
+    request.headers.get("Cookie")
+  );
+
+  if (session.has("userId")) {
+    data.userId = session.get("userId") as string;
+  }
+
+  if (session.has("role")) {
+    data.role = session.get("role") as string;
+  }
+
+  return data
+};
+
 export default function App() {
+  const data = useLoaderData<typeof loader>()
   return (
     <html lang="en">
       <head>
@@ -32,8 +57,11 @@ export default function App() {
       </head>
       <body>
         <div className="container">
+          <Header />
           <Outlet />
         </div>
+        <hr />
+        <blockquote>userid: {data.userId} role: {data.role}</blockquote>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

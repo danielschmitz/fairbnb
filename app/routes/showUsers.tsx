@@ -24,7 +24,7 @@ export default function Index() {
   const users = useLoaderData<typeof loader>();
   return (
     <div>
-      <h1>Welcome to fAirBnb</h1>
+      <strong>Users</strong>
       <ul>
         {users.map((user) => (
           <li key={user.id}>{user.name} - {user.email}</li>
