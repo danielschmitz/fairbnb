@@ -12,6 +12,14 @@ form {
   margin-bottom: 0px;
 }
 
+.right {
+  float: right;
+}
+
+.center {
+  margin: auto;
+}
+
 .form_footer {
   display: flex;
   justify-content: space-between;
