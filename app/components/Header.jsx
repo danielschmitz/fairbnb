@@ -4,9 +4,10 @@ import { Link, useRouteLoaderData, useMatches } from "@remix-run/react"
 export default function Header() {
   const title = "fAirBnb"
 
-  const matches = useMatches();
-  
+  const matches = useMatches()
+
   const isLoginRoute = matches.find(match => match.pathname === "/login")
+  const isRegisterRoute = matches.find(match => match.pathname === "/register")
 
   const { userId, role } = useRouteLoaderData("root")
 
@@ -16,7 +17,8 @@ export default function Header() {
         <li><h1>{title}</h1></li>
       </ul>
       <ul>
-        {!isLoginRoute && <li><Link to="/login" role="button">Login</Link></li> }
+        {!isRegisterRoute && <li><Link to="/register">Register</Link></li>}
+        {!isLoginRoute && <li><Link to="/login" role="button">Login</Link></li>}
       </ul>
     </nav>
   }
@@ -60,3 +62,4 @@ export default function Header() {
 
   return <div></div>
 };
+
