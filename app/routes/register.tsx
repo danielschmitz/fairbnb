@@ -3,7 +3,8 @@ import { type LoaderArgs, redirect, type ActionArgs } from "@remix-run/node"
 import { commitSession, getSession } from "~/sessions";
 import bcrypt from "bcryptjs";
 import { db } from "~/db";
-import { Form, Link, useActionData } from "@remix-run/react";
+import { Form, Link, useActionData, useTransition } from "@remix-run/react";
+
 
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(
@@ -64,6 +65,9 @@ export default function Register() {
   
   const error = useActionData()
 
+  const transiction = useTransition()
+  const busy = Boolean(transiction.submission)
+
   return <Form method="post">
     <article>
       <header><h2>Register</h2></header>
@@ -91,7 +95,7 @@ export default function Register() {
 
       <footer className="form_footer">
         <Link to="/">Back</Link>
-        <button type="submit">Register</button>
+        <button type="submit" disabled={busy}>{busy ? 'Wait...' : 'Register'}</button>
       </footer>
     </article>
   </Form>

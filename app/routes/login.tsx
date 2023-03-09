@@ -1,9 +1,10 @@
-import { useLoaderData, Form, Link, useActionData, useRouteLoaderData } from "@remix-run/react"
+import { useLoaderData, Form, Link, useActionData, useTransition } from "@remix-run/react"
 import { redirect, type ActionArgs, type LoaderArgs } from "@remix-run/node"
 import { db } from "~/db"
 import { type User } from "@prisma/client"
 import bcrypt from "bcryptjs";
 import { commitSession, getSession } from "~/sessions";
+
 
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
@@ -67,6 +68,9 @@ export default function Login() {
   const errorLoader = useLoaderData()
   const errorAction = useActionData()
 
+  const transition = useTransition();
+  const busy : boolean = Boolean(transition.submission)
+
   return <>
     <article>
       <Form method="post">
@@ -98,7 +102,9 @@ export default function Login() {
 
         <footer className="form_footer">
           <Link to="/">Back</Link>
-          <button type="submit">Login</button>
+          <button type="submit" disabled={busy}>
+            {busy ? 'Logging...': 'Login'}
+          </button>
         </footer>
 
       </Form>
