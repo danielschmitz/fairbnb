@@ -12,6 +12,7 @@ import {
 } from "@remix-run/react";
 import styles from './styles.css'
 import Header from "./components/Header";
+import LoadPageSwitch from "./components/loadPageSwitch";
 
 export function links() {
   return [{
@@ -56,6 +57,7 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <LoadPageSwitch/>
         <div className="container">
           <Header />
           <Outlet />

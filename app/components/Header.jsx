@@ -1,11 +1,11 @@
 import { Role } from "@prisma/client"
-import { Link, useRouteLoaderData, useMatches } from "@remix-run/react"
+import { Link, useRouteLoaderData, useMatches, useTransition } from "@remix-run/react"
 
 export default function Header() {
   const title = "fAirBnb"
 
   const matches = useMatches()
-
+  
   const isLoginRoute = matches.find(match => match.pathname === "/login")
   const isRegisterRoute = matches.find(match => match.pathname === "/register")
 

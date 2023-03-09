@@ -39,3 +39,23 @@ form {
   background-color: brown;
   color: white;
 }
+
+#loading {
+  position: fixed;
+  height: 4px;
+  width: 0%;
+  top: 0;
+  left: 0;
+  background-color: darkgray;
+  animation: loading 2s linear forwards;
+}
+
+@keyframes loading {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
