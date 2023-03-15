@@ -1,4 +1,4 @@
-import { Role, User } from "@prisma/client";
+import { type Role, type User } from "@prisma/client";
 import { type LoaderArgs, redirect, type ActionArgs } from "@remix-run/node"
 import { commitSession, getSession } from "~/sessions";
 import bcrypt from "bcryptjs";
