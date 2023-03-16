@@ -3,19 +3,15 @@ import { type LoaderArgs, redirect, type ActionArgs } from "@remix-run/node"
 import { commitSession, getSession } from "~/sessions";
 import bcrypt from "bcryptjs";
 import { db } from "~/db";
-import { Form, Link, useActionData, useTransition } from "@remix-run/react";
-import {getUser, verify} from "~/login";
+import { Form, Link, useActionData, useLoaderData, useTransition } from "@remix-run/react";
+import { getUser, verify } from "~/login";
 
 
 export async function loader({ request }: LoaderArgs) {
- 
+
   await verify(request, [Role.USER, Role.HOST, Role.ADMIN]);
-
-  const user:User = await getUser(request);
-
-  console.log(user);
-
-  return {}
+  const user: User = await getUser(request);
+  return user
 };
 
 export async function action({ request }: ActionArgs) {
@@ -31,7 +27,7 @@ export async function action({ request }: ActionArgs) {
   }
 
   const checkEmail = await db.user.findFirst({
-    where: {email: email}
+    where: { email: email }
   })
 
   if (checkEmail) {
@@ -61,16 +57,17 @@ export async function action({ request }: ActionArgs) {
   })
 };
 
-export default function Register() {
-  
+export default function Profile() {
+
   const error = useActionData()
+  const user = useLoaderData<typeof loader>()
 
   const transiction = useTransition()
   const busy = Boolean(transiction.submission)
 
   return <Form method="post">
     <article>
-      <header><h2>Register</h2></header>
+      <header><h2>Profile</h2></header>
 
       <div style={{ maxWidth: 400, margin: 'auto' }}>
 
@@ -78,17 +75,12 @@ export default function Register() {
 
         <label htmlFor="name">
           Name
-          <input type="text" id="name" name="name" placeholder="Name" required />
+          <input type="text" id="name" name="name" placeholder="Name" required defaultValue={user.name} />
         </label>
 
         <label htmlFor="name">
           Email
-          <input type="email" id="email" name="email" placeholder="Email" required />
-        </label>
-
-        <label htmlFor="password">
-          Password
-          <input type="password" id="password" name="password" placeholder="Password" required />
+          <input type="email" id="email" name="email" placeholder="Email" required defaultValue={user.email} />
         </label>
 
       </div>
