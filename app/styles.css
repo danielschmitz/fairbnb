@@ -1,4 +1,4 @@
-@import url('@picocss/pico');
+@import url("@picocss/pico");
 
 nav > ul > li > h1 {
   margin-bottom: 0px;
@@ -58,4 +58,3 @@ form {
     width: 100%;
   }
 }
-
