@@ -5,6 +5,10 @@ type SessionData = {
   role: string;
 };
 
+type SessionFlashData = {
+  message: string;
+};
+
 const secret = process.env.SESSION_SECRET;
 
 if (!secret) {
@@ -12,7 +16,7 @@ if (!secret) {
 }
 
 const { getSession, commitSession, destroySession } =
-  createCookieSessionStorage<SessionData>({
+  createCookieSessionStorage<SessionData, SessionFlashData>({
     cookie: {
       name: "fairbnb__session",
       httpOnly: true,

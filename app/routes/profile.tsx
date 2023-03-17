@@ -9,6 +9,7 @@ import {
   useTransition,
 } from "@remix-run/react";
 import { getUser, verify } from "~/login";
+import { commitSession, getSession } from "~/sessions";
 
 export async function loader({ request }: LoaderArgs) {
   await verify(request, [Role.USER, Role.HOST, Role.ADMIN]);
@@ -22,18 +23,18 @@ export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const email = formData.get("email") as User["email"];
   const name = formData.get("name") as User["name"];
-  const idUser = await formData.get("id");
+  const id = Number(await formData.get("id"));
 
-  if (!idUser) {
-    throw new Error("idUser is required");
+  if (!id) {
+    throw new Error("id is required");
   }
 
-  if (Number(idUser) !== Number(user.id)) {
-    throw new Error("idUser is not the same as the user id");
+  if (id !== user.id) {
+    throw new Error("You cannot change the data of another account");
   }
 
   const checkEmail = await db.user.findFirst({
-    where: { email: email, NOT: { id: Number(idUser) } },
+    where: { email, NOT: { id } },
   });
 
   if (checkEmail) {
@@ -41,15 +42,17 @@ export async function action({ request }: ActionArgs) {
   }
 
   await db.user.update({
-    where: { id: Number(idUser) },
-    data: {
-      name: name,
-      email: email,
-    },
+    where: { id },
+    data: { name, email },
   });
 
-  // todo: adds a flash message
-  return redirect("/");
+  const session = await getSession(request.headers.get("Cookie"));
+  session.flash("message", "Profile updated");
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 }
 
 export default function Profile() {

@@ -21,7 +21,7 @@ export default function Header() {
     role: string;
   };
 
-  if (userId === "") {
+  if ( (userId === "") || (userId === undefined) ) {
     // not logged
     return (
       <nav>

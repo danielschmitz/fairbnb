@@ -54,6 +54,7 @@ export const action = async ({ request }: ActionArgs) => {
   const session = await getSession(request.headers.get("Cookie"));
   session.set("userId", user.id.toString());
   session.set("role", user.role);
+  session.flash("message", `Welcome ${user.name}`);
 
   return redirect("/", {
     headers: {
@@ -88,7 +89,13 @@ export default function Login() {
 
             <label htmlFor="firstname">
               Email
-              <input type="email" id="email" name="email" placeholder="Email" />
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email"
+                defaultValue="user@user.com"
+              />
             </label>
 
             <label htmlFor="lastname">
@@ -98,6 +105,7 @@ export default function Login() {
                 id="password"
                 name="password"
                 placeholder="Password"
+                defaultValue="123456"
               />
             </label>
           </div>

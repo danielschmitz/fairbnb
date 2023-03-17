@@ -1,5 +1,5 @@
-import type { LoaderArgs } from "@remix-run/node";
-import { getSession } from "./sessions";
+import { json, LoaderArgs } from "@remix-run/node";
+import { commitSession, getSession } from "./sessions";
 import type { MetaFunction } from "@remix-run/node";
 import {
   Links,
@@ -32,7 +32,7 @@ export const meta: MetaFunction = () => ({
 export async function loader({ request }: LoaderArgs) {
   const data = {
     userId: "",
-    role: "",
+    role: ""
   };
   const session = await getSession(request.headers.get("Cookie"));
 
@@ -44,11 +44,23 @@ export async function loader({ request }: LoaderArgs) {
     data.role = session.get("role") as string;
   }
 
-  return data;
+  if (session.has("message")) {
+    data.message = session.get("message") as string;
+  }
+
+  return json(
+    data,
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    }
+  );
 }
 
 export default function App() {
   const data = useLoaderData<typeof loader>();
+
   return (
     <html lang="en">
       <head>
