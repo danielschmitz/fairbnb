@@ -7,6 +7,7 @@ type SessionData = {
 
 type SessionFlashData = {
   message: string;
+  error: string;
 };
 
 const secret = process.env.SESSION_SECRET;
