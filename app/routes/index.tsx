@@ -1,6 +1,7 @@
 
 import { json, type LoaderArgs } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react";
+import { useState } from "react";
 import { commitSession, getSession } from "~/sessions";
 
 export async function loader({request}: LoaderArgs) {
@@ -18,7 +19,13 @@ export async function loader({request}: LoaderArgs) {
 };
 
 export default function Index() {
-  const message = useLoaderData<typeof loader>();
+  
+  const [message, setMessage] = useState(useLoaderData<typeof loader>())
+
+  setTimeout(() => {
+    setMessage("");
+  }, 3000);
+
   return (
     <div>
       {message && <div className="flash">{message}</div>}
