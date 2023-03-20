@@ -13,6 +13,7 @@ import {
 import styles from "./styles.css";
 import Header from "./components/Header";
 import LoadPageSwitch from "./components/loadPageSwitch";
+import BeHost from "./components/BeHost";
 
 export function links() {
   return [
@@ -72,6 +73,7 @@ export default function App() {
         <div className="container">
           <Header />
           <Outlet />
+          <BeHost/>
         </div>
         <hr />
         <blockquote>
