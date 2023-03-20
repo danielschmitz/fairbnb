@@ -127,7 +127,6 @@ export default function Profile() {
         </header>
 
         <div style={{ maxWidth: 400, margin: "auto" }}>
-          
 
           <input type="hidden" name="id" id="id" defaultValue={user.id} />
 
