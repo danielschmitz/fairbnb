@@ -1,10 +1,5 @@
 import { Role } from "@prisma/client";
-import {
-  Link,
-  useRouteLoaderData,
-  useMatches,
-  useTransition,
-} from "@remix-run/react";
+import { Link, useRouteLoaderData, useMatches } from "@remix-run/react";
 
 export default function Header() {
   const title = "fAirBnb";
@@ -21,7 +16,7 @@ export default function Header() {
     role: string;
   };
 
-  if ( (userId === "") || (userId === undefined) ) {
+  if (userId === "" || userId === undefined) {
     // not logged
     return (
       <nav>
@@ -56,16 +51,19 @@ export default function Header() {
             <h1>{title}</h1>
           </li>
         </ul>
-        <ul>
-          <li>
-            <Link to="/showUsers">Users</Link>
-          </li>
-          <li>
-            <Link to="/logout" role="button">
-              Logout
-            </Link>
-          </li>
-        </ul>
+          <ul>
+            <li>
+              <Link to="/showUsers">Users</Link>
+            </li>
+            <li>
+              <Link to="/admin">Admin</Link>
+            </li>
+            <li>
+              <Link to="/logout" role="button">
+                Logout
+              </Link>
+            </li>
+          </ul>
       </nav>
     );
   }
