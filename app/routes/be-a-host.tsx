@@ -10,7 +10,7 @@ import {
 } from "@remix-run/react";
 import { getUser, verify } from "~/login";
 import { commitSession, getSession } from "~/sessions";
-import bcrypt from "bcryptjs";
+
 
 export async function loader({ request }: LoaderArgs) {
   await verify(request, [Role.USER, Role.HOST, Role.ADMIN]);
