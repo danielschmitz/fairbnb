@@ -1,0 +1,35 @@
+import { z } from "zod";
+import { makeDomainFunction } from "domain-functions";
+import { db } from "~/db";
+import { type ActionFunction } from "@remix-run/node";
+import { formAction } from "~/form-action.server";
+import { Form } from "~/form";
+
+const schema = z.object({
+  name: z.string().min(3).max(50),
+});
+
+const mutation = makeDomainFunction(schema)(async (values) =>
+  db.country.create({
+    data: {
+      ...values,
+    },
+  })
+);
+
+export const action: ActionFunction = async ({ request }) =>
+  formAction({
+    request,
+    schema,
+    mutation,
+    successPath: "/admin/countries" /* path to redirect on success */,
+  });
+
+export default function CreateCountry() {
+  return (
+    <>
+      <h5>Create Country</h5>
+      <Form schema={schema} />
+    </>
+  );
+}
