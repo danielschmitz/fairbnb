@@ -11,7 +11,7 @@ const schema = z.object({
 });
 
 const mutation = makeDomainFunction(schema)(async (values) =>
-  await CountryService.save(values)
+  await CountryService.create(values)
 );
 
 export const action: ActionFunction = async ({ request }) =>
