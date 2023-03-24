@@ -4,17 +4,14 @@ import { db } from "~/db";
 import { type ActionFunction } from "@remix-run/node";
 import { formAction } from "~/form-action.server";
 import { Form } from "~/form";
+import CountryService from "~/services/country.server";
 
 const schema = z.object({
   name: z.string().min(3).max(50),
 });
 
 const mutation = makeDomainFunction(schema)(async (values) =>
-  db.country.create({
-    data: {
-      ...values,
-    },
-  })
+  await CountryService.save(values)
 );
 
 export const action: ActionFunction = async ({ request }) =>
