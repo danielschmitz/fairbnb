@@ -46,13 +46,11 @@ export async function loader({ params }: LoaderArgs) {
   //   throw new Error("ID is not integer");
   // }
     
-  try {
-    z.number().int().parse(id);
-  } catch (error) {
-    console.log(error)
+  const checkInteger = z.number().int().safeParse(id);
+  if (checkInteger.success === false) {
     throw new Error("Invalid ID");
-  }
-
+  }   
+  
   const country = await CountryService.get(id);
 
   if (!country) {
