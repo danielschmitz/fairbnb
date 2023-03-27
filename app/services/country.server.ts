@@ -22,7 +22,10 @@ const CountryService = {
     where: {
       id
     }
-  })
+  }),
+  delete: async (id:number) => await db.country.delete({
+    where: {id}
+  }),
 
 }
 
