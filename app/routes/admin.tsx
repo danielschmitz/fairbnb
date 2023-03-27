@@ -1,13 +1,13 @@
-import { Link, Outlet } from "@remix-run/react";
+import { Link, NavLink, Outlet } from "@remix-run/react";
 
-import type { LoaderArgs } from "@remix-run/node"
+import type { LoaderArgs } from "@remix-run/node";
 import { Role } from "@prisma/client";
 import { verify } from "~/login";
 
-export async function loader({request}: LoaderArgs) {
+export async function loader({ request }: LoaderArgs) {
   await verify(request, [Role.ADMIN]);
-  return {}
-};
+  return {};
+}
 
 export default function Index() {
   return (
@@ -18,18 +18,18 @@ export default function Index() {
           <nav>
             <ul>
               <li>
-                <Link to="/admin/users">Users</Link>
+                <NavLink to="/admin/users">Users</NavLink>
               </li>
               <li>
-                <Link to="/admin/countries">Countries</Link>
+                <NavLink to="/admin/countries">Countries</NavLink>
               </li>
               <li>
-                <Link to="/admin/cities">Cities</Link>
+                <NavLink to="/admin/cities">Cities</NavLink>
               </li>
             </ul>
           </nav>
         </header>
-        <Outlet/>
+        <Outlet />
         <footer className="form_footer">
           <Link to="/">Back</Link>
         </footer>
