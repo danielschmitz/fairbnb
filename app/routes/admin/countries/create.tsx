@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { makeDomainFunction } from "domain-functions";
-import { db } from "~/db";
 import { type ActionFunction } from "@remix-run/node";
 import { formAction } from "~/form-action.server";
 import { Form } from "~/form";
