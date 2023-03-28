@@ -17,6 +17,7 @@ export default function AdminCities() {
         <thead>
           <tr>
             <th>Name</th>
+            <th>Country</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -24,6 +25,7 @@ export default function AdminCities() {
           {cities.map((city) => (
             <tr key={city.id}>
               <td>{city.name}</td>
+              <td>{city.country.name}</td>
               <td>
                 <Link to={`/admin/cities/${city.id}/edit`}>Edit</Link>
                 &nbsp;&nbsp;

@@ -17,7 +17,11 @@ const CityService = {
         ...city
       }
     }),
-  all: async () => await db.city.findMany(),
+  all: async () => await db.city.findMany({
+    include: { 
+      country: true
+    }
+  }),
   get: async (id: number) => await db.city.findUnique({
     where: {
       id

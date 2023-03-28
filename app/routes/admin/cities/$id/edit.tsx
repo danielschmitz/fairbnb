@@ -6,6 +6,7 @@ import { z } from "zod";
 import { Form } from "~/form";
 import { formAction } from "~/form-action.server";
 import CityService from "~/services/city.server";
+import CountryService from "~/services/country.server";
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
@@ -20,6 +21,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
 const schema = z.object({
   id: z.number(),
   name: z.string().min(3).max(50),
+  countryId: z.number(),
 });
 
 const mutation = makeDomainFunction(schema)(async (values) =>
@@ -38,14 +40,6 @@ export async function loader({ params }: LoaderArgs) {
 
   const id: number = Number(params.id);
 
-  // if (!id) {
-  //   throw new Error("Invalid ID");
-  // }
-
-  // if (Number.isInteger(id) === false) {
-  //   throw new Error("ID is not integer");
-  // }
-
   const checkInteger = z.number().int().safeParse(id);
   if (checkInteger.success === false) {
     throw new Error("Invalid ID");
@@ -57,30 +51,41 @@ export async function loader({ params }: LoaderArgs) {
     throw new Error("City not found");
   }
 
-  return json(city)
+  const countries = await CountryService.all();
+
+  return json({city, countries})
 };
 
 
 export default function EditCity() {
-  const city = useLoaderData<typeof loader>();
+  const {city, countries} = useLoaderData<typeof loader>();
+  const options = countries.map((country) => ({
+    name: country.name,
+    value: country.id,
+  }));
 
   return <>
     <h5>Create City</h5>
     {city &&
       <Form schema={schema} values={city} hiddenFields={['id']}>
-
-        {({ Field, Errors, Button }) => (
-          <>
-            <Field name="id" />
-            <Field name="name" />
-            <Errors />
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button style={{ maxWidth: '100px' }} />
+      {({ Field, Errors, Button }) => (
+        <>
+          <div className="grid">
+            <div>
+              <Field name="id"/>
+              <Field name="name"/>
             </div>
-          </>
-        )}
-
-      </Form>
+            <div>
+              <Field name="countryId" options={options} label="Country" />
+            </div>
+          </div>
+          <Errors />
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button style={{ maxWidth: "100px" }} />
+          </div>
+        </>
+      )}
+    </Form>
     }
   </>
 };
