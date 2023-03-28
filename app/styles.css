@@ -69,13 +69,15 @@ form {
   }
 }
 
-
-
 .active {
-  background-color: #aad7e7;
+  background-color: var(--primary-focus);
 }
-@media screen and (prefers-color-scheme: dark) {
-  .active {
-    background-color: #034358;
-  }
+
+:where(input, textarea)[aria-invalid="false"] {
+  border-color: var(--form-element-border-color);
+  background-image: none !important;
+}
+:where(select):not([type="checkbox"], [type="radio"], [type="date"], [type="datetime-local"], [type="month"], [type="time"], [type="week"])[aria-invalid="false"] {
+  border-color: var(--form-element-border-color);
+  background-image: var(--icon-chevron);
 }
