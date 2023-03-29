@@ -23,6 +23,7 @@ model User {
   password  String
   createdAt DateTime @default(now())
   role      Role     @default(USER)
+  places    Place[]
 
   @@map("users")
 }
@@ -40,6 +41,20 @@ model City {
   name      String
   countryId Int
   country   Country @relation(fields: [countryId], references: [id])
+  places    Place[]
   
   @@map("cities")
+}
+
+model Place {
+  id        Int     @id @default(autoincrement())
+  name      String
+  address   String
+  price     Float
+  userId    Int
+  user      User  @relation(fields: [userId], references: [id])
+  cityId    Int
+  city      City  @relation(fields: [cityId], references: [id])
+
+  @@map("places")
 }
