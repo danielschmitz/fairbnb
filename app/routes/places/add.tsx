@@ -47,7 +47,7 @@ export const action: ActionFunction = async ({ request }) =>
   });
 
 export default function AddPlace() {
-  const { userId, cities } = useLoaderData<typeof loader>();
+  const { user, cities } = useLoaderData<typeof loader>();
 
   const options = cities.map((city) => ({
     name: `${city.country.name} - ${city.name}`,
@@ -60,7 +60,7 @@ export default function AddPlace() {
         <header>
           <h4>Add Place</h4>
         </header>
-        <Form schema={schema} values={{userId:'1'}} >
+        <Form schema={schema} values={{userId:user.id}} hiddenFields={['userId']}>
           {({ Field, Errors, Button }) => (
             <>
               <Field name="userId"/>
