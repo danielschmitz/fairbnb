@@ -1,10 +1,5 @@
 import { Role } from "@prisma/client";
-import {
-  type ActionArgs,
-  type LoaderArgs,
-  redirect,
-  ActionFunction,
-} from "@remix-run/node";
+import type { LoaderArgs, ActionFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { makeDomainFunction } from "domain-functions";
 import { z } from "zod";
@@ -18,7 +13,6 @@ export async function loader({ request }: LoaderArgs) {
   await verify(request, [Role.HOST]);
   const cities = await CityService.all();
   const user = await getUser(request);
-  console.log({user})
   return {
     user,
     cities,
@@ -60,10 +54,14 @@ export default function AddPlace() {
         <header>
           <h4>Add Place</h4>
         </header>
-        <Form schema={schema} values={{userId:user.id}} hiddenFields={['userId']}>
+        <Form
+          schema={schema}
+          values={{ userId: user.id }}
+          hiddenFields={["userId"]}
+        >
           {({ Field, Errors, Button }) => (
             <>
-              <Field name="userId"/>
+              <Field name="userId" />
               <div className="grid">
                 <div>
                   <Field name="name" />
@@ -73,13 +71,16 @@ export default function AddPlace() {
                 </div>
               </div>
               <div>
-                <Field name="cityId" options={options} label="City" />
+                <Field name="cityId" 
+                  options={options} 
+                  label="City" />
               </div>
               <div>
                 <Field name="address" />
               </div>
               <Errors />
-              <div style={{ display: "flex", justifyContent: "center" }}>
+              <div style={{ display: "flex", 
+                        justifyContent: "center" }}>
                 <Button style={{ maxWidth: "100px" }} />
               </div>
             </>

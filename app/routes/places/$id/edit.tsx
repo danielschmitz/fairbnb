@@ -1,10 +1,5 @@
 import { Role, Place } from "@prisma/client";
-import {
-  type ActionArgs,
-  type LoaderArgs,
-  redirect,
-  ActionFunction,
-} from "@remix-run/node";
+import type { ActionArgs, LoaderArgs,ActionFunction} from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { makeDomainFunction } from "domain-functions";
 import { z } from "zod";
@@ -15,11 +10,8 @@ import CityService from "~/services/city.server";
 import PlaceService from "~/services/place.server";
 
 export async function loader({ request, params }: LoaderArgs) {
-  
   await verify(request, [Role.HOST]);
-
   const id: number = Number(params.id);
-
   const url = new URL(request.url)
   const saved = url.searchParams.get('saved')
   
@@ -36,7 +28,6 @@ export async function loader({ request, params }: LoaderArgs) {
 
   const cities = await CityService.all();
   const user = await getUser(request);
-  console.log({user})
   return {
     user,
     cities,
@@ -69,8 +60,6 @@ export const action: ActionFunction = async ({ request }) =>
 
 export default function EditPlace() {
   const { saved, cities, place } = useLoaderData<typeof loader>();
-
-  console.log({saved})
 
   const options = cities.map((city) => ({
     name: `${city.country.name} - ${city.name}`,
@@ -116,10 +105,10 @@ export default function EditPlace() {
           )}
         </Form>
         <footer className="form_footer">
-          <Link to={`/places/${place}/photos`}>Photos</Link>
-          <Link to={`/places/${place}/bookings`}>Bookings</Link>
-          <Link to={`/places/${place}/reviews`}>Reviews</Link>
-          <Link to={`/places/${place}/disable`}>Disable</Link>
+          <Link to={`/places/${place.id}/photos`}>Photos</Link>
+          <Link to={`/places/${place.id}/bookings`}>Bookings</Link>
+          <Link to={`/places/${place.id}/reviews`}>Reviews</Link>
+          <Link to={`/places/${place.id}/disable`}>Disable</Link>
         </footer>
       </article>
     </>
