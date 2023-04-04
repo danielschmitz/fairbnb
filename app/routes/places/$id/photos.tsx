@@ -1,8 +1,16 @@
 import { Role } from "@prisma/client";
-import { type ActionArgs, json, type LoaderArgs, unstable_parseMultipartFormData, unstable_createMemoryUploadHandler } from "@remix-run/node";
+import {
+  type ActionArgs,
+  json,
+  type LoaderArgs,
+  unstable_parseMultipartFormData,
+  unstable_createMemoryUploadHandler,
+} from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { z } from "zod";
+import { db } from "~/db";
 import { verify } from "~/login";
+import PhotoService from "~/services/photo.server";
 import PlaceService from "~/services/place.server";
 
 export async function loader({ request, params }: LoaderArgs) {
@@ -20,28 +28,41 @@ export async function loader({ request, params }: LoaderArgs) {
     throw new Error("Place not found");
   }
 
-  return json({ place });
+  const photos = await PhotoService.all(place.id);
+
+  const photosData = photos.map((photo) => {
+    const data = Buffer.from(photo.img).toString("base64");
+    return {
+      id: photo.id,
+      name: photo.name,
+      img: data,
+    };
+  });
+  return json({ place, photosData });
 }
 
-const uploadHandler = unstable_createMemoryUploadHandler({
-  
-});
-
-export async function action({ request }: ActionArgs) {
+export async function action({ request, params }: ActionArgs) {
   const formData = await unstable_parseMultipartFormData(
     request,
-    uploadHandler // <-- we'll look at this deeper next
+    unstable_createMemoryUploadHandler({})
   );
-  const file = formData.get("img");
-  
-    
-  
-  return {};
-};
+  const img = formData.get("img") as File;
+  const name = formData.get("name") as string;
+  const placeId = Number(params.id);
 
+  await PhotoService.create({
+    img: await Buffer.from(await img.arrayBuffer()),
+    name,
+    placeId,
+  });
+
+  return {
+    ok: true,
+  };
+}
 
 export default function PhotosPlace() {
-  const { place } = useLoaderData<typeof loader>();
+  const { place, photosData } = useLoaderData<typeof loader>();
 
   return (
     <>
@@ -57,12 +78,14 @@ export default function PhotosPlace() {
               <input id="img" type="file" name="img" accept="image/*" />
             </div>
             <div>
-              <label htmlFor="description"> Description: </label>
-              <input id="description" type="text" name="description" />
+              <label htmlFor="name"> Description: </label>
+              <input id="name" type="text" name="name" />
             </div>
           </div>
           <div className="center">
-            <button style={{maxWidth: '200px'}} type="submit"> Upload </button>
+            <button style={{ maxWidth: "200px" }} type="submit">
+              Upload
+            </button>
           </div>
         </Form>
 
@@ -71,6 +94,15 @@ export default function PhotosPlace() {
         <header>
           <strong>Saved Photos</strong>
         </header>
+
+        <div>
+          {photosData &&
+            photosData.map((photo) => (
+              <div key={photo.id} className="center" style={{ margin: "10px" }}>
+                <img src={`data:image;base64,${photo.img}`} alt={photo.name} />
+              </div>
+            ))}
+        </div>
 
         <footer className="form_footer">
           <Link to={`/`}>Home</Link>
