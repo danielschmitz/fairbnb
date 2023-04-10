@@ -11,12 +11,14 @@ import {
 import { getUser, verify } from "~/login";
 import { commitSession, getSession } from "~/sessions";
 import bcrypt from "bcryptjs";
+import PlaceService from "~/services/place.server";
 
 
 export async function loader({ request }: LoaderArgs) {
   await verify(request, [Role.USER, Role.HOST, Role.ADMIN]);
   const user: User = await getUser(request);
-  return user;
+  const places = await PlaceService.allByUserId(user.id)
+  return {user,places};
 }
 
 export async function action({ request }: ActionArgs) {
@@ -113,7 +115,7 @@ async function changePassword(request: Request, formData: FormData) {
 
 export default function Profile() {
   const error = useActionData();
-  const user = useLoaderData<typeof loader>();
+  const {user, places} = useLoaderData<typeof loader>();
 
   const transiction = useTransition();
   const busy = Boolean(transiction.submission);
@@ -121,6 +123,21 @@ export default function Profile() {
   return (
     <Form method="post">
       {error && <div className="error">{error}</div>}
+      <article>
+        <header>
+          <strong>Places</strong>
+          </header>
+          <ul>
+            {places && places.map((place) => (
+              <li key={place.id}>
+                <Link to={`/places/${place.id}/edit`}>{place.name}</Link>
+              </li>
+            ))}
+          </ul>
+            <footer>
+              <Link to="/places/add">New Place</Link>
+            </footer>
+      </article>
       <article>
         <header>
           <h2>Your Profile</h2>

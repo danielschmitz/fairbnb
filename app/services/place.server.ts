@@ -20,6 +20,11 @@ const PlaceService = {
   all: async () => await db.place.findMany({
     
   }),
+  allByUserId: async (userId: number) => await db.place.findMany({
+    where: {
+      userId
+    }
+  }),
   get: async (id: number) => await db.place.findUnique({
     where: {
       id
