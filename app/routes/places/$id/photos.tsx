@@ -6,7 +6,7 @@ import {
   unstable_parseMultipartFormData,
   unstable_createMemoryUploadHandler,
 } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, Outlet, useLoaderData } from "@remix-run/react";
 import { z } from "zod";
 import { db } from "~/db";
 import { verify } from "~/login";
@@ -99,8 +99,9 @@ export default function PhotosPlace() {
           {photosData &&
             photosData.map((photo) => (
               <div key={photo.id} className="center" style={{ margin: "10px" }}>
-                <img src={`data:image;base64,${photo.img}`} alt={photo.name} />
-              </div>
+                <img src={`data:image;base64,${photo.img}`} alt={photo.name} />                
+                <Link to={`/photos/${photo.id}/delete`}>Delete?</Link>
+              </div>              
             ))}
         </div>
 

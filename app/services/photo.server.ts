@@ -17,6 +17,9 @@ const PhotoService = {
     }
   }),
   get: async (id: number) => await db.photo.findUnique({
+    include: { 
+      place: true
+    },
     where: {
       id
     }
