@@ -83,7 +83,7 @@ export default function Login() {
 
           <br />
 
-          <div className="center" style={{ maxWidth: 500 }}>
+          <div style={{ maxWidth: 400, margin: "auto" }}>
             {errorLoader && <div className="error">{errorLoader}</div>}
             {errorAction && <div className="error">{errorAction}</div>}
 
