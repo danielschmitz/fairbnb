@@ -69,7 +69,7 @@ export default function Register() {
           <h2>Register</h2>
         </header>
 
-        <div style={{ maxWidth: 400, margin: "auto" }}>
+        <div className="center">
           {error && <div className="error">{error}</div>}
 
           <label htmlFor="name">

@@ -82,8 +82,8 @@ export default function PhotosPlace() {
               <input id="name" type="text" name="name" />
             </div>
           </div>
-          <div className="center">
-            <button style={{ maxWidth: "200px" }} type="submit">
+          <div className="center" >
+            <button type="submit">
               Upload
             </button>
           </div>
@@ -98,7 +98,7 @@ export default function PhotosPlace() {
         <div>
           {photosData &&
             photosData.map((photo) => (
-              <div key={photo.id} className="center" style={{ margin: "10px" }}>
+              <div key={photo.id} style={{justifyContent: 'center', display: 'flex', gap: '20px', marginBottom: '20px'}}>
                 <img src={`data:image;base64,${photo.img}`} alt={photo.name} />                
                 <Link to={`/photos/${photo.id}/delete`}>Delete?</Link>
               </div>              
