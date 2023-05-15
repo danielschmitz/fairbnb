@@ -18,7 +18,9 @@ const PlaceService = {
       }
     }),
   all: async () => await db.place.findMany({
-    
+    include: {
+      Photo: true
+    }
   }),
   allByUserId: async (userId: number) => await db.place.findMany({
     where: {
